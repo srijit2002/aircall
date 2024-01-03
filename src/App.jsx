@@ -1,17 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import "./App.css";
 
-import Header from './Header.jsx';
-
-const App = () => {
+function App() {
   return (
-    <div className='container'>
-      <Header/>
-      <div className="container-view">Some activities should be here</div>
-    </div>
+    <h1 className="text-3xl mx-auto text-red-500">
+      Tailwind CSS is working
+    </h1>
   );
-};
-
-ReactDOM.render(<App/>, document.getElementById('app'));
+}
 
 export default App;
