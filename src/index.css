@@ -67,3 +67,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+body {
+  background-color: #2D3250;
+  display: flex;
+  justify-content: center;
+}

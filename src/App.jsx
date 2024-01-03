@@ -1,10 +1,14 @@
 import "./App.css";
+import { QueryClientProvider } from "react-query";
+import router from "./router/main.jsx";
+import { RouterProvider } from "react-router-dom";
+import queryClient from "@/lib/reactQuery";
 
 function App() {
   return (
-    <h1 className="text-3xl mx-auto text-red-500">
-      Tailwind CSS is working
-    </h1>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 

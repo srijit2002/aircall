@@ -9,5 +9,5 @@ export default defineConfig({
     "process.env": {},
   },
   envPrefix: "REACT_APP",
-  plugins: [react()],
+  plugins: [react()]
 });
