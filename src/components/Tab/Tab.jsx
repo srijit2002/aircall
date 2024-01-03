@@ -32,20 +32,7 @@ export function Tab({ data = [] }) {
       </HeadLessTab.List>
       <HeadLessTab.Panels className="overflow-y-auto max-h-screen scrollbar-none px-2 py-3">
         {tabComponents.map((tabComponent, index) => (
-          <HeadLessTab.Panel key={index}>
-            <Transition
-              show={tabIndex ===index}
-              as={Fragment}
-              enter="transition ease-out duration-300"
-              enterFrom="transform opacity-0"
-              enterTo="transform opacity-100"
-              leave="transition ease-in duration-200"
-              leaveFrom="transform opacity-100"
-              leaveTo="transform opacity-0"
-            >
-              {tabComponent}
-            </Transition>
-          </HeadLessTab.Panel>
+          <HeadLessTab.Panel key={index}>{tabComponent}</HeadLessTab.Panel>
         ))}
       </HeadLessTab.Panels>
     </HeadLessTab.Group>

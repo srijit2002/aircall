@@ -1,6 +1,7 @@
 import { CallEntry } from "./CallEntry";
 import propTypes from "prop-types";
 
+
 export const CallEntryList = ({ data, date }) => {
   return (
     <section className="flex flex-col gap-3">

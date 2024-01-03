@@ -71,4 +71,5 @@ body {
   background-color: #2D3250;
   display: flex;
   justify-content: center;
+  overflow-y: hidden;
 }

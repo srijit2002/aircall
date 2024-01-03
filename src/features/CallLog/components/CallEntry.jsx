@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Spinner } from "@/components/Spinner";
 import { CallDetails } from "./CallDetails";
 import { CgVoicemailR } from "react-icons/cg";
+import propTypes from "prop-types";
 
 export const CallEntry = ({
   created_at,
@@ -15,21 +16,17 @@ export const CallEntry = ({
   from,
   id,
   direction,
-  to,
   via,
   duration,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { mutateAsync: updateCallMutation } = useUpdateCall({
-    id,
-    isArchived: !is_archived,
-  });
+  const { mutateAsync: updateCallMutation } = useUpdateCall();
   const handleArchieve = async (e) => {
     e.stopPropagation();
     try {
       setLoading(true);
-      await updateCallMutation();
+      await updateCallMutation({ id: id, isArchived: !is_archived });
       await queryClient.refetchQueries("allCalls");
     } catch (error) {
       console.log(error);
@@ -64,7 +61,7 @@ export const CallEntry = ({
             {call_type === "missed" ? (
               <MdCallMissed size={18} className="text-red-500" />
             ) : call_type === "voicemail" ? (
-              <CgVoicemailR size={18} className="text-green-500"/>
+              <CgVoicemailR size={18} className="text-green-500" />
             ) : (
               <MdCallReceived size={18} className="text-green-500" />
             )}
@@ -84,4 +81,16 @@ export const CallEntry = ({
       </article>
     </>
   );
+};
+
+CallEntry.propTypes = {
+  created_at: propTypes.string,
+  call_type: propTypes.string,
+  is_archived: propTypes.bool,
+  from: propTypes.number,
+  id: propTypes.string,
+  direction: propTypes.string,
+  to: propTypes.number,
+  via: propTypes.number,
+  duration: propTypes.number,
 };

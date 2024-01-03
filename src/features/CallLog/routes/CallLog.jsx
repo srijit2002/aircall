@@ -2,30 +2,66 @@ import { CallLogEntries } from "../components/CallLogEntries";
 import { useAllCalls } from "../api/getAllCalls";
 import formatCallLogData from "../utils/formatCallLogData";
 import { Tab } from "@/components/Tab";
+import { useUpdateCall } from "../api/updateCall";
+import queryClient from "@/lib/reactQuery";
+import { useState } from "react";
 
 export const CallLog = () => {
   const { data, isLoading } = useAllCalls();
+  const { mutateAsync: updateCallMutation } = useUpdateCall();
+  const [archiveLoading, setArchivealoading] = useState(false);
   if (isLoading) {
     return <h1>loading....</h1>;
   }
-  const unArchievedCalls = formatCallLogData(
-    data.data.filter((call) => !call.is_archived) || []
-  );
-  const archievedCalls = formatCallLogData(
-    data.data.filter((call) => call.is_archived) || []
-  );
-
+  const rawArchivedCalls = data?.data?.filter((call) => call.is_archived) || [];
+  const rawUnArchivedCalls =
+    data?.data?.filter((call) => !call.is_archived) || [];
+  const unArchievedCalls = formatCallLogData(rawUnArchivedCalls);
+  const archievedCalls = formatCallLogData(rawArchivedCalls);
+  const handleArchive = async (archived) => {
+    try {
+      setArchivealoading(true);
+      if (archived) {
+        for (let { id } of rawArchivedCalls) {
+          await updateCallMutation({ id, isArchived: false });
+        }
+      } else {
+        for (let { id } of rawUnArchivedCalls) {
+          await updateCallMutation({ id, isArchived: true });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      await queryClient.refetchQueries("allCalls");
+      setArchivealoading(false);
+    }
+  };
   return (
     <main className="w-[360px] flex flex-col bg-white min-h-screen max-h-screen">
       <Tab
         data={[
           {
             key: "Recent Calls",
-            component: <CallLogEntries calls={unArchievedCalls} />,
+            component: (
+              <CallLogEntries
+                calls={unArchievedCalls}
+                handleArchive={handleArchive}
+                isLoading={archiveLoading}
+                archived={false}
+              />
+            ),
           },
           {
             key: "Archived",
-            component: <CallLogEntries calls={archievedCalls} />,
+            component: (
+              <CallLogEntries
+                calls={archievedCalls}
+                handleArchive={handleArchive}
+                isLoading={archiveLoading}
+                archived={true}
+              />
+            ),
           },
         ]}
       />
