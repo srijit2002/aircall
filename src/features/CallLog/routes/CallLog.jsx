@@ -5,13 +5,15 @@ import { Tab } from "@/components/Tab";
 import { useUpdateCall } from "../api/updateCall";
 import queryClient from "@/lib/reactQuery";
 import { useState } from "react";
+import { Spinner } from "@/components/Spinner";
+import { toast } from "react-toastify";
 
 export const CallLog = () => {
   const { data, isLoading } = useAllCalls();
   const { mutateAsync: updateCallMutation } = useUpdateCall();
   const [archiveLoading, setArchivealoading] = useState(false);
   if (isLoading) {
-    return <h1>loading....</h1>;
+    return <Spinner />;
   }
   const rawArchivedCalls = data?.data?.filter((call) => call.is_archived) || [];
   const rawUnArchivedCalls =
@@ -30,8 +32,26 @@ export const CallLog = () => {
           await updateCallMutation({ id, isArchived: true });
         }
       }
+      toast.success("Yayy! entries updated successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (error) {
       console.log(error);
+      toast.error("Ooops! Some error has occured", {
+        position: "top-right",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } finally {
       await queryClient.refetchQueries("allCalls");
       setArchivealoading(false);

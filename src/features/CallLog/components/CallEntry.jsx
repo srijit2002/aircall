@@ -8,6 +8,7 @@ import { Spinner } from "@/components/Spinner";
 import { CallDetails } from "./CallDetails";
 import { CgVoicemailR } from "react-icons/cg";
 import propTypes from "prop-types";
+import { toast } from "react-toastify";
 
 export const CallEntry = ({
   created_at,
@@ -28,7 +29,25 @@ export const CallEntry = ({
       setLoading(true);
       await updateCallMutation({ id: id, isArchived: !is_archived });
       await queryClient.refetchQueries("allCalls");
+      toast.success("Yayy! entry updated successfully", {
+        position: "top-right",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (error) {
+      toast.error("Ooops! Some error has occured", {
+        position: "top-right",
+        autoClose: 3000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       console.log(error);
     } finally {
       setLoading(false);
